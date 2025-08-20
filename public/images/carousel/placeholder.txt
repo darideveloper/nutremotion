@@ -1,0 +1,7 @@
+This directory contains placeholder images for the NutrEmotion carousel. 
+Replace these with actual optimized images.
+
+Recommended image specifications:
+- Dimensions: 800x600px or 16:9 aspect ratio
+- Format: JPG or WebP for better performance
+- Size: Optimize to under 200KB per image
