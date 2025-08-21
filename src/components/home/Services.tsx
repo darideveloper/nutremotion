@@ -14,7 +14,7 @@ const programas = [
       "Seguimiento continuo por WhatsApp"
     ],
     price: "60 € / mes",
-    path: "/programas/nutricion"
+    path: "/contacto"
   },
   {
     title: "Programa de Psiconutrición",
@@ -27,7 +27,7 @@ const programas = [
     ],
     tag: "Popular",
     price: "95 € / mes",
-    path: "/programas/psiconutricion"
+    path: "/contacto"
   },
   {
     title: "Programa Psiconutrición Plus",
@@ -39,7 +39,7 @@ const programas = [
       "2 consultas mensuales por videollamada"
     ],
     price: "130 € / mes",
-    path: "/programas/psiconutricion-plus"
+    path: "/contacto"
   },
   {
     title: "Programa Integral Move",
@@ -52,7 +52,7 @@ const programas = [
       "Plan de entrenamiento personalizado para realizar desde casa"
     ],
     price: "125 € / mes",
-    path: "/programas/integral-move"
+    path: "/contacto"
   },
   {
     title: "Programa Ayuno Intermitente",
@@ -64,7 +64,7 @@ const programas = [
     ],
     tag: "Nuevo",
     price: "60 € / mes",
-    path: "/programas/ayuno-intermitente"
+    path: "/contacto"
   }
 ];
 
