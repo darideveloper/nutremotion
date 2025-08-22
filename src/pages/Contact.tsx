@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,25 +18,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useToast } from "@/components/ui/use-toast";
 import { Phone, Mail, MapPin } from "lucide-react";
 
 export default function ContactPage() {
-  const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedProgram, setSelectedProgram] = useState("");
-
-  // Check for thanks parameter in URL for success message
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('thanks') === 'true') {
-      toast({
-        title: "Formulario enviado",
-        description:
-          "Gracias por contactar con nosotros. Te responderemos lo antes posible.",
-      });
-    }
-  }, [toast]);
 
   const handleSubmit = (e: React.FormEvent) => {
     setIsSubmitting(true);
