@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { Facebook, Instagram, Twitter } from "lucide-react";
+import { Instagram, } from "lucide-react";
+import { FaTiktok } from "react-icons/fa";
 
 export default function Footer() {
   return (
@@ -41,14 +42,11 @@ export default function Footer() {
               <p className="text-sm text-muted-foreground">Teléfono: +34 643 805 329</p>
             </address>
             <div className="flex space-x-4 mt-4">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-                <Facebook size={18} className="text-nutr-green-500 hover:text-nutr-green-600" />
-              </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <a href="https://www.instagram.com/nutremotion.live" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                 <Instagram size={18} className="text-nutr-green-500 hover:text-nutr-green-600" />
               </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-                <Twitter size={18} className="text-nutr-green-500 hover:text-nutr-green-600" />
+              <a href="https://www.tiktok.com/@nutremotion.live" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+                <FaTiktok size={18} className="text-nutr-green-500 hover:text-nutr-green-600" />
               </a>
             </div>
           </div>
