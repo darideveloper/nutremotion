@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -24,58 +24,24 @@ import { Phone, Mail, MapPin } from "lucide-react";
 export default function ContactPage() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    subject: "",
-    program: "",
-    message: "",
-  });
+  const [selectedProgram, setSelectedProgram] = useState("");
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSelectChange = (value: string) => {
-    setFormData((prev) => ({ ...prev, program: value }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    try {
-      // In a real implementation, you would use a service like EmailJS, Formspree, or a backend API
-      // This is a simulated email submission
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
+  // Check for thanks parameter in URL for success message
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('thanks') === 'true') {
       toast({
         title: "Formulario enviado",
-        description: "Gracias por contactar con nosotros. Te responderemos lo antes posible.",
+        description:
+          "Gracias por contactar con nosotros. Te responderemos lo antes posible.",
       });
-
-      // Clear form after successful submission
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        subject: "",
-        program: "",
-        message: "",
-      });
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error al enviar",
-        description: "Hubo un problema al enviar el formulario. Por favor, inténtalo de nuevo.",
-      });
-    } finally {
-      setIsSubmitting(false);
     }
+  }, [toast]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    setIsSubmitting(true);
+    // The form will submit normally to the external service
+    // The redirect will be handled by the form action
   };
 
   return (
@@ -87,7 +53,8 @@ export default function ContactPage() {
           </h1>
 
           <p className="text-muted-foreground max-w-[800px] mx-auto">
-            Estamos aquí para ayudarte. Completa el formulario a continuación y nos pondremos en contacto contigo lo antes posible.
+            Estamos aquí para ayudarte. Completa el formulario a continuación y
+            nos pondremos en contacto contigo lo antes posible.
           </p>
         </div>
 
@@ -95,13 +62,27 @@ export default function ContactPage() {
           <div className="md:col-span-2">
             <Card className="border shadow-sm">
               <CardHeader>
-                <CardTitle className="font-serif text-2xl">Envíanos un mensaje</CardTitle>
+                <CardTitle className="font-serif text-2xl">
+                  Envíanos un mensaje
+                </CardTitle>
                 <CardDescription>
                   Completa el formulario con tus datos y consulta
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form 
+                  action="https://services.darideveloper.com/contact-form/"
+                  method="POST"
+                  encType="multipart/form-data"
+                  onSubmit={handleSubmit}
+                  className="space-y-6"
+                >
+                  {/* Api inputs */}
+                  <input type="hidden" name="api_key" value="1kEXn1aa6LGCMu2TPl9z6X8KY" />
+                  <input type="hidden" name="user" value="nutremotion" />
+                  <input type="hidden" name="subject" value="Nuevo mensaje de contacto en tu web!" />
+                  <input type="hidden" name="redirect" value={`${window.location.origin}?thanks=true`} />
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="name">Nombre completo*</Label>
@@ -110,8 +91,6 @@ export default function ContactPage() {
                         name="name"
                         placeholder="Tu nombre"
                         required
-                        value={formData.name}
-                        onChange={handleChange}
                       />
                     </div>
                     <div className="space-y-2">
@@ -122,8 +101,6 @@ export default function ContactPage() {
                         type="email"
                         placeholder="tu@email.com"
                         required
-                        value={formData.email}
-                        onChange={handleChange}
                       />
                     </div>
                     <div className="space-y-2">
@@ -132,8 +109,6 @@ export default function ContactPage() {
                         id="phone"
                         name="phone"
                         placeholder="+34 600 123 456"
-                        value={formData.phone}
-                        onChange={handleChange}
                       />
                     </div>
                     <div className="space-y-2">
@@ -143,26 +118,35 @@ export default function ContactPage() {
                         name="subject"
                         placeholder="Asunto de tu consulta"
                         required
-                        value={formData.subject}
-                        onChange={handleChange}
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="program">¿Qué programa te interesa?</Label>
-                    <Select onValueChange={handleSelectChange} value={formData.program}>
+                    <Select value={selectedProgram} onValueChange={setSelectedProgram}>
                       <SelectTrigger>
                         <SelectValue placeholder="Selecciona un programa (opcional)" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="nutricion">Programa de Nutrición</SelectItem>
-                        <SelectItem value="psiconutricion">Programa de Psiconutrición</SelectItem>
-                        <SelectItem value="psiconutricion-plus">Programa Psiconutrición Plus</SelectItem>
-                        <SelectItem value="integral-move">Programa Integral Move</SelectItem>
-                        <SelectItem value="ayuno-intermitente">Programa Ayuno Intermitente</SelectItem>
+                        <SelectItem value="nutricion">
+                          Programa de Nutrición
+                        </SelectItem>
+                        <SelectItem value="psiconutricion">
+                          Programa de Psiconutrición
+                        </SelectItem>
+                        <SelectItem value="psiconutricion-plus">
+                          Programa Psiconutrición Plus
+                        </SelectItem>
+                        <SelectItem value="integral-move">
+                          Programa Integral Move
+                        </SelectItem>
+                        <SelectItem value="ayuno-intermitente">
+                          Programa Ayuno Intermitente
+                        </SelectItem>
                       </SelectContent>
                     </Select>
+                    <input type="hidden" name="program" value={selectedProgram} />
                   </div>
 
                   <div className="space-y-2">
@@ -173,8 +157,6 @@ export default function ContactPage() {
                       placeholder="Escribe aquí tu consulta..."
                       required
                       className="min-h-[150px]"
-                      value={formData.message}
-                      onChange={handleChange}
                     />
                   </div>
 
@@ -185,10 +167,13 @@ export default function ContactPage() {
                   >
                     {isSubmitting ? "Enviando..." : "Enviar mensaje"}
                   </Button>
-                  
+
                   <p className="text-xs text-center text-muted-foreground mt-4">
                     Al enviar este formulario, aceptas nuestra{" "}
-                    <a href="/politicas-de-privacidad" className="underline hover:text-nutr-green-600">
+                    <a
+                      href="/politicas-de-privacidad"
+                      className="underline hover:text-nutr-green-600"
+                    >
                       política de privacidad
                     </a>
                   </p>
@@ -200,7 +185,9 @@ export default function ContactPage() {
           <div>
             <Card className="border shadow-sm h-full">
               <CardHeader>
-                <CardTitle className="font-serif text-2xl">Información de contacto</CardTitle>
+                <CardTitle className="font-serif text-2xl">
+                  Información de contacto
+                </CardTitle>
                 <CardDescription>
                   Otras formas de ponerte en contacto con nosotros
                 </CardDescription>
@@ -210,19 +197,21 @@ export default function ContactPage() {
                   <Mail className="h-5 w-5 mt-1 text-nutr-green-600" />
                   <div>
                     <h3 className="font-medium">Email</h3>
-                    <p className="text-sm text-muted-foreground">info@nutremotion.com</p>
+                    <p className="text-sm text-muted-foreground">
+                      info@nutremotion.com
+                    </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start space-x-4">
                   <Phone className="h-5 w-5 mt-1 text-nutr-green-600" />
                   <div>
                     <h3 className="font-medium">Teléfono</h3>
-                    <p className="text-sm text-muted-foreground">+34 643 805 329</p>
+                    <p className="text-sm text-muted-foreground">
+                      +34 643 805 329
+                    </p>
                   </div>
                 </div>
-                
-
               </CardContent>
             </Card>
           </div>
