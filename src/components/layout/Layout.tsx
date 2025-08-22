@@ -5,8 +5,6 @@ import Footer from "./Footer";
 import WhatsAppButton from "./WhatsAppButton";
 import PhoneDisplay from "./PhoneDisplay";
 import BackgroundMusic from "./BackgroundMusic";
-import Swal from "sweetalert2";
-import "sweetalert2/dist/sweetalert2.min.css";
 
 export default function Layout() {
   // Check for thanks parameter in URL for success message
@@ -17,13 +15,19 @@ export default function Layout() {
     
     if (urlParams.get('thanks') === 'true') {
       console.log("Showing SweetAlert2...");
-      Swal.fire({
-        title: "¡Formulario enviado!",
-        text: "Gracias por contactar con nosotros. Te responderemos lo antes posible.",
-        icon: "success",
-        confirmButtonText: "Entendido",
-        confirmButtonColor: "#16a34a", // nutr-green-600
-        background: "#ffffff"
+      
+      // Dynamic import of SweetAlert2
+      import("sweetalert2").then((Swal) => {
+        Swal.default.fire({
+          title: "¡Formulario enviado!",
+          text: "Gracias por contactar con nosotros. Te responderemos lo antes posible.",
+          icon: "success",
+          confirmButtonText: "Entendido",
+          confirmButtonColor: "#16a34a", // nutr-green-600
+          background: "#ffffff"
+        });
+      }).catch((error) => {
+        console.error("Failed to load SweetAlert2:", error);
       });
     }
   }, []);

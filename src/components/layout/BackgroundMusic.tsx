@@ -15,6 +15,40 @@ export default function BackgroundMusic() {
     }
   }, [volume]);
 
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const tryPlay = async () => {
+      try {
+        await audio.play();
+        console.log("Audio is playing 🎵");
+        setIsPlaying(true);
+        removeListeners();
+      } catch (err) {
+        console.log("Playback blocked:", err);
+      }
+    };
+
+    const removeListeners = () => {
+      document.removeEventListener("click", tryPlay);
+      document.removeEventListener("touchstart", tryPlay);
+      document.removeEventListener("mousedown", tryPlay);
+      document.removeEventListener("keydown", tryPlay);
+    };
+
+    // Primary interactions that browsers consider as user engagement
+    document.addEventListener("click", tryPlay, { once: true });
+    document.addEventListener("touchstart", tryPlay, { once: true });
+    document.addEventListener("mousedown", tryPlay, { once: true });
+    document.addEventListener("keydown", tryPlay, { once: true });
+
+    // Cleanup listeners on unmount
+    return () => {
+      removeListeners();
+    };
+  }, []);
+
   const togglePlay = () => {
     if (audioRef.current) {
       if (isPlaying) {
